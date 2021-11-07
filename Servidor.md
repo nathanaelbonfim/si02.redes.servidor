@@ -47,7 +47,26 @@ isql
 
 ### ISQL 
 ```sql
-CREATE DATABASE "/var/lib/firebird/agenda.fdb"
+CREATE DATABASE "/var/lib/firebird/agenda.fdb";
 ```
 
 ### SQL do banco
+```sql
+--- Tabela de usuários
+CREATE TABLE usuario (
+	id INTEGER NOT NULL PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	hash_senha VARCHAR(255) NOT NULL
+);
+
+--- Tabela de contato
+CREATE TABLE contato (
+	id INTEGER NOT NULL PRIMARY KEY,
+	nome VARCHAR(255),
+	sobrenome VARCHAR(255) NOT NULL,
+	telefone VARCHAR(80) NOT NULL,
+	anotacao VARCHAR(2048)
+);
+
+```
