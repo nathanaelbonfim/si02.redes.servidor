@@ -1,22 +1,42 @@
 # Alunos
-### RA: 00210090  - Gabriel Ciolin Fasolo
-### RA: 00210465 - Nathanel Cavalcanti Bonfim
-### RA: 00210594 - Lucas de Barros Siqueira
-### RA: 00212191 - Vitor Eduardo da Silva Gibim
-### RA: 00204966 - Alexandre Gonçalves Silva
-#
+> RA: 00210090  - Gabriel Ciolin Fasolo
+> RA: 00210465 - Nathanel Cavalcanti Bonfim
+> RA: 00210594 - Lucas de Barros Siqueira
+> RA: 00212191 - Vitor Eduardo da Silva Gibim
+> RA: 00204966 - Alexandre Gonçalves Silva
+
+# Instalação do servidor SSH
+```bash
+sudo apt install ssh-server
+```
+
+## Configuração do servidor SSH
+```bash
+vi /etc/ssh/sshd_config
+```
+
+```sshconfig
++ Port 5959                  # Altera a porta padrão para 5959
++ PasswordAuthentication no  # Desabilita o login por senha (só com chave SSH)
+```
+
 # Instalação do Apache
 
 ```bash
 apt install apache2
 ```
 
-### Permitindo o tráfego apenas na porta 80
+# Configuração do firewall
+### Bloqueio de todas as conexões por padrão
+```bash
+sudo ufw default deny incoming
+```
 
+### Permitindo o tráfego apenas na porta 80 (apache2) e 5959 (ssh)
 ```bash
 sudo ufw allow in "Apache"
 ```
-# Instalação do MariaDB
+# Instalação do MariaDB (banco de dados)
 
 ```bash
 sudo apt install mariadb-server
@@ -61,7 +81,6 @@ GRANT ALL PRIVILEGES ON *.* TO 'NOME_DO_USUARIO'@'localhost' WITH GRANT OPTION;
 ```bash 
 exit;
 ```
- 
 
 
 # Instalação do Firebird
@@ -135,4 +154,42 @@ CREATE TABLE contato (
 	anotacao VARCHAR(2048)
 );
 
+```
+
+# Instalação de antivírus
+```bash
+sudo apt install clamav clamav-daemon
+```
+
+## Varreduras periódicas a cada hora
+```bash
+crontab -u clamav -e
+```
+
+```crontab
+# m h  dom mon dow   command
+
+0 */4 * * * clamscan --recursive / >> /var/clamv/log.txt  # Escaneia o servidor a cada 4 horas
+* */2 * * * /usr/local/bin/freshclam                      # Atualiza a base de dados de duas em duas horas
+```
+
+## Repositório para a base da dados
+> /usr/local/etc/freshclam.conf 
+
+```conf
++ DatabaseMirror db.local.clamav.net
++ DatabaseMirror database.clamav.net
++ DatabaseMirror clamavdb.c3sl.ufpr.br
+```
+
+# Configuração de rotação de logs
+```conf
+/var/log/clamav/scan.log {
+        rotate 30          # Mantêm 30 arquivos no histórico
+        daily              # Rotaciona diariamente
+
+        notifempty         # Notifica o usuário caso
+						   # não haja nenhum.
+        compress           # Comprime os arquivos não rotacionados
+}
 ```
