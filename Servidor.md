@@ -136,3 +136,15 @@ CREATE TABLE contato (
 );
 
 ```
+### DNS interno Bind9
+
+sudo apt-get install bind9
+
+sudo /etc/init.d/bind9 status
+
+* bind9 is running
+
+
+### DNS interno config
+
+Tudo configurado via editor de texto Nano
