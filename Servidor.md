@@ -193,3 +193,63 @@ crontab -u clamav -e
         compress           # Comprime os arquivos não rotacionados
 }
 ```
+
+
+# Criação de interfaces virtuais de rede
+
+### Habilitar o módulo de interfaces virtuais no kernel
+```bash
+sudo modprobe dummy
+```
+
+### Adição de interfaces virtuais
+```bash
+sudo ip link add eth0...eth10 type dummy
+```
+### Arquivo de configuração DHCP
+> /etc/dhcp/dhcpd.conf
+```conf
+default-lease-time 600;                       
+max-lease-time 7200;                          
+authoritative;                                
+                                              
+subnet 192.168.1.0 netmask 255.255.255.240 {  
+        range 172.59.0.1 172.59.255.254;      
+        option routers 172.59.0.13;           
+        option domain-name-servers 172.59.0.1;
+}                                             
+```
+
+
+#### Bóson Treinamentos
+> /etc/networking/interfaces
+```conf
+## DHCP Server
+allow-hotplug eth1
+iface eth1 inet static
+
+adress 192.168.10.1
+netmask 255.255.255.0
+network 192.168.10.0
+broadcast 192.168.1.255
+```
+
+#### Reuninicar a placa de rede
+```bash
+ifconfig eth1 down
+ifconfig eth1 up
+```
+ip addr flush eth1 && systemctl restart networking
+
+
+vim /etc/network/interfaces
+vim /etc/dhcp/dhcpd.conf
+
+
+
+# Instalação do nginx
+
+```bash
+apt install nginx php7.4-fpm
+vim /etc/nginx/sites-available/agenda
+```
