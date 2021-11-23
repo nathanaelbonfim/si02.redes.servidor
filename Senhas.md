@@ -2,7 +2,7 @@
 
 
 ### Mysql
-CREATE USER 'agenda'@'localhost' IDENTIFIED BY 'Y6EedilKT1Om';
+CREATE USER 'agenda'@'localhost' IDENTIFIED BY '';
 
 ### Senha
 CREATE DATABASE agenda;
